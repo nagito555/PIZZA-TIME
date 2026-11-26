@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Меню — PizzaPoint{% endblock %}
+{% block content %}
+<section class="hero container">
+  <div class="hero-copy"><p class="eyebrow">ГОРЯЧАЯ • СВЕЖАЯ • ВКУСНАЯ</p><h1>Пицца, которая<br>делает день <span>лучше.</span></h1><p class="hero-text">Готовим из свежих ингредиентов и доставляем настроение в каждом кусочке.</p><a class="btn btn-primary" href="#menu">Выбрать пиццу</a></div>
+  <div class="hero-image" role="img" aria-label="Аппетитная пицца"></div>
+</section>
+<section class="container menu-section" id="menu">
+  <div class="section-heading"><div><p class="eyebrow">НАШЕ МЕНЮ</p><h2>Выбери любимую</h2></div></div>
+  <div class="category-list"><a class="category-chip {% if not selected_category %}active{% endif %}" href="{{ url_for('index') }}">Все пиццы</a>{% for category in categories %}<a class="category-chip {% if selected_category == category.id %}active{% endif %}" href="{{ url_for('index', category=category.id) }}">{{ category.name }}</a>{% endfor %}</div>
+  {% if products %}<div class="product-grid">{% for product in products %}
+  <article class="product-card"><div class="product-image" {% if product.image_url %}style="background-image:url('{{ product.image_url }}')"{% endif %}><span class="product-category">{{ product.category_name }}</span></div><div class="product-content"><h3>{{ product.name }}</h3><p>{{ product.description }}</p><div class="product-bottom"><strong>{{ product.price|rub }}</strong>{% if g.user and g.user.role == 'customer' %}<form method="post" action="{{ url_for('cart_add', product_id=product.id) }}"><input type="hidden" name="_csrf" value="{{ csrf_token() }}"><input type="hidden" name="back" value="{{ request.full_path }}"><button class="btn btn-primary btn-small" type="submit">В корзину +</button></form>{% elif not g.user %}<a class="btn btn-primary btn-small" href="{{ url_for('login', next=url_for('index')) }}">Заказать</a>{% else %}<span class="muted">Просмотр</span>{% endif %}</div></div></article>
+  {% endfor %}</div>{% else %}<p class="empty">В этой категории пока нет пицц.</p>{% endif %}
+</section>
+{% endblock %}

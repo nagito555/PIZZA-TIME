@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Регистрация — PizzaPoint{% endblock %}
+{% block content %}
+<div class="container auth-page"><section class="auth-card"><p class="eyebrow">БУДЕМ ЗНАКОМЫ</p><h1>Регистрация</h1><p class="form-intro">Создайте аккаунт, чтобы собирать корзину и отслеживать заказы.</p>
+<form method="post"><input type="hidden" name="_csrf" value="{{ csrf_token() }}">{% if next_url %}<input type="hidden" name="next" value="{{ next_url }}">{% endif %}
+<label for="full_name">ФИО</label><input id="full_name" name="full_name" value="{{ form.get('full_name','') }}" required minlength="2" maxlength="100" autocomplete="name">
+<label for="phone">Телефон</label><input id="phone" name="phone" type="tel" value="{{ form.get('phone','') }}" placeholder="+7 999 123-45-67" required autocomplete="tel">
+<label for="email">Электронная почта</label><input id="email" name="email" type="email" value="{{ form.get('email','') }}" required autocomplete="email">
+<label for="password">Пароль</label><input id="password" name="password" type="password" minlength="6" required autocomplete="new-password"><p class="hint">Не менее 6 символов.</p>
+<label for="password_repeat">Повторите пароль</label><input id="password_repeat" name="password_repeat" type="password" minlength="6" required autocomplete="new-password">
+<button class="btn btn-primary btn-wide" type="submit">Создать аккаунт</button></form><p class="switch-auth">Уже зарегистрированы? <a href="{{ url_for('login', next=next_url) }}">Войти</a></p></section></div>
+{% endblock %}
